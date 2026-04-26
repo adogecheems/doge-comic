@@ -144,7 +144,7 @@ export default {
         },
         async go(ref, offset = 0) {
             this.loadingImage = true;
-            await new Promise(async resolve => { setTimeout(resolve, await setting.getSyncTime()) });
+            await new Promise(async resolve => { setTimeout(resolve, offset ? await setting.getSyncTime() : 0) });
             this.loadingImage = false;
             await new Promise(resolve => this.$page.$dom.scrollToElement(this.$refs[ref], { offset }));
         },
