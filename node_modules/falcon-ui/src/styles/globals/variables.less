@@ -1,0 +1,227 @@
+/* falcon-ui基础样式变量定义 */
+
+// refer https://coolors.co/ff7a7a-ffbf71-fbff83-77ff5c-68f2ff-6da5ff-927eff-ff90ff-ffffbd
+
+@red: #EF4141;
+@orange: #FF6A00;
+@yellow: #FF9500;
+@green: #2D901E;
+@cyan: #209AAD;
+@blue: #376FDB;
+@purple: #893FCD;
+
+@light-green: #7CFF00;
+
+@black: #000000;
+@white: #FFFFFF;
+
+// refer https://coolors.co/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529
+
+@gray-100: #f8f9fa;
+@gray-200: #e9ecef;
+@gray-300: #dee2e6;
+@gray-400: #ced4da;
+@gray-500: #adb5bd;
+@gray-600: #6c757d;
+@gray-700: #495057;
+@gray-800: #343a40;
+@gray-900: #212529;
+
+@gray: @gray-600;
+
+@gray-1: @gray-100;
+@gray-2: @gray-200;
+@gray-3: @gray-300;
+@gray-4: @gray-400;
+@gray-5: @gray-500;
+@gray-6: @gray-600;
+@gray-7: @gray-700;
+@gray-8: @gray-800;
+@gray-9: @gray-900;
+
+@primary: @orange;
+@secondary: @gray-600;
+
+@success:       @green;
+@info:          @cyan;
+@warning:       @yellow;
+@danger:        @red;
+@light:         @gray-100;
+@dark:          @gray-800;
+
+@theme-colors: {
+  primary:     @primary;
+  secondary:   @secondary;
+  success:     @success;
+  info:        @info;
+  warning:     @warning;
+  danger:      @danger;
+  light:       @light;
+  dark:        @dark;
+};
+
+// Gradient Colors
+@gradient-red: linear-gradient(to right, #ff6034, #ee0a24);
+@gradient-orange: linear-gradient(to right, #ffd01e, #ff8917);
+
+// Common Component Colors
+@text-color: #606266;
+@active-color: @gray-2;
+@active-opacity:  0.6;
+@disabled-opacity:  0.4;
+@background-color: @gray-1;
+@background-color-light: #fafafa;
+@text-link-color: #576b95;
+@card-background-color: @gray-2;
+
+// Font
+@font-weight-normal:          400;  // Normal (Regular)
+@font-weight-medium:          500;  // Medium
+@font-weight-semi-bold:       600;  // Semi Bold (Demi Bold)
+@font-weight-bold:            700;  // Bold
+
+// some coefficent, usage like font-size: (@btn-font-size * @theme-sizes[small])
+@theme-sizes: {
+  mini: 0.75;
+  small: 0.875;
+  normal: 1;
+  medium: 1.125;
+  large: 1.25;
+}
+
+@font-size-base:        16px;  // XXX: not used yet
+
+@font-size-title-large: 36px;
+@font-size-title-medium: 32px;
+@font-size-title-normal: @font-size-title-medium;
+@font-size-title-small: 28px;
+
+@font-weight-title-large:   @font-weight-medium;
+@font-weight-title-medium:  @font-weight-medium;
+@font-weight-title-normal:  @font-weight-title-medium;
+@font-weight-title-small:   @font-weight-medium;
+
+@font-size-content-large: 24px;
+@font-size-content-medium: 20px;
+@font-size-content-normal: @font-size-content-medium;
+@font-size-content-small: 18px;
+
+@font-weight-content-large:   @font-weight-normal;
+@font-weight-content-medium:  @font-weight-normal;
+@font-weight-content-normal:  @font-weight-content-medium;
+@font-weight-content-small:   @font-weight-normal;
+
+// Animation
+@animation-duration-base: 0.3s;
+@animation-duration-fast: 0.2s;
+@animation-timing-function-enter: ease-out;
+@animation-timing-function-leave: ease-in;
+
+// global variables
+// 圆角 radius
+@radius-small: 8px;
+@radius-medium: 16px;
+@radius-normal: 24px;
+@radius-large: 32px;
+
+// 边距
+// border padding margin
+@space-very-compact: 8px;
+@space-compact: 16px;
+@space-normal: 24px;
+@space-loose: 32px;
+
+// 边框 border
+@border-small: 1px;
+@border-medium: 2px;
+@border-normal: 3px;
+@border-large: 4px;
+
+// 间距
+@gap-very-compact: 8px;
+@gap-compact: 16px;
+@gap-normal: 24px;
+@gap-loose: 32px;
+
+// component used variables, derive from global variables.
+// 边距 padding & margin
+// padding
+@padding-very-compact: @space-very-compact;
+@padding-compact: @space-compact;
+@padding-normal: @space-normal;
+@padding-loose: @space-loose;
+// margin
+@margin-very-compact: @space-very-compact;
+@margin-compact: @space-compact;
+@margin-normal: @space-normal;
+@margin-loose: @space-loose;
+
+// border
+@border-color: @gray-3;
+@border-width-small: @border-small;
+@border-width-medium: @border-medium;
+@border-width-normal: @border-normal;
+@border-width-large: @border-large;
+
+@border-radius-small: @radius-small;
+@border-radius-medium: @radius-medium;
+@border-radius-normal: @radius-normal;
+@border-radius-large: @radius-large;
+
+// ## component specific colors
+// Button
+@btn-color: @white;  // button text
+@btn-background-color: @gray-500;  // normal button background color
+@btn-font-size: @font-size-title-small;
+@btn-border-width: @border-width-normal;
+@btn-border-radius: @radius-normal;
+@btn-plain-background-color: transparent;
+@btn-disabled-opacity: @disabled-opacity;
+@btn-icon-text-spacing: 4px;
+
+// toast
+@toast-radius: @radius-medium;
+@toast-padding-x: @padding-loose;
+@toast-font-color: @text-color;
+@toast-font-size: @font-size-title-small;
+
+// Dialog
+@dialog-title-font-size: @font-size-title-large;
+@dialog-title-text-color: @text-color;
+@dialog-content-font-size: @font-size-title-small;
+@dialog-content-text-color: @text-color;
+@dialog-background-color: @card-background-color;
+@dialog-min-width: 70%;
+@dialog-width: auto;
+@dialog-border-radius: @border-radius-large;
+@dialog-title-padding: @padding-loose @padding-loose 0;
+@dialog-content-padding: @padding-loose;
+@dialog-footer-padding: 0 @padding-loose @padding-loose;
+@dialog-btn-min-width: 80px;
+
+// progress
+@progress-height:10px;
+@progress-bar-color: @secondary;
+@progress-color: @primary;
+
+// seekbar
+@seekbar-active-color: @primary;
+@seekbar-inactive-color: @secondary;
+
+// radio
+@radio-text-color: @text-color;
+@radio-checked-text-color: @primary;
+@radio-symbol-color: @white;
+
+// checkbox
+@checkbox-text-color: @text-color;
+@checkbox-checked-text-color: @primary;
+@checkbox-symbol-color: @white;
+
+// switch
+@switch-inactive-color: @secondary;
+@switch-active-color: @primary;
+@switch-box-border-width: 0px;
+@switch-box-border-color: @border-color;
+@switch-button-shadow: 0px 0px 5px #888;
+@switch-button-color: @white;

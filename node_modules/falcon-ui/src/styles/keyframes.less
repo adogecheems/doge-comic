@@ -1,0 +1,96 @@
+@import "./globals/mixins.less";
+
+/* 动画基础定义 START */
+// 动画定义
+.all-animation {
+  .animation(300ms, cubic-bezier(0.645,0.045,0.355,1));
+}
+// 渐入动画：适用 opacity 等
+.opacity-animation {
+  .animation(300ms, cubic-bezier(0.23, 1, 0.32, 1));
+}
+// 渐入线性动画：适用 opacity 等
+.opacity-linear-animation {
+  .animation(200ms, linear);
+}
+
+// 颜色动画：适用 color/ border-color 变换
+.color-animation {
+  .animation(200ms, cubic-bezier(0.645, 0.045, 0.355, 1));
+}
+// 背景颜色动画：适用 background-color
+.bg-color-animation {
+  .animation(300ms, cubic-bezier(0.55, 0, 0.1, 1));
+}
+/* 动画基础定义 END */
+
+
+// ## 以下是动画样式组合
+
+/* fade 渐入动画 START */
+// 整体组件渐入动画
+.fl-fade-in {
+  .opacity-animation();
+  animation-name: fl-fade-in-keyframes;
+}
+@keyframes fl-fade-in-keyframes {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+// 仅背景渐入样式，从透明到半黑
+.fl-bg-fade-in {
+  .bg-color-animation();
+  animation-name: fl-bg-color-fade-in-keyframes;
+}
+@keyframes fl-bg-color-fade-in-keyframes {
+  from {background-color: rgba(0, 0, 0, 0);}
+  to {background-color: rgba(0, 0, 0, 0.6);}
+}
+/* fade 渐入动画 END */
+
+
+/* zoom 展开动画 START */
+// zoom keyframes 定义
+@keyframes fl-zoom-in-x-keyframes {
+  from {opacity: 0; transform: scaleX(0);}
+  to {opacity: 1; transform: scaleX(1);}
+}
+@keyframes fl-zoom-in-y-keyframes {
+  from {opacity: 0; transform: scaleY(0);}
+  to {opacity: 1; transform: scaleY(1);}
+}
+
+// 中间向两边展开动画
+.fl-zoom-in-center {
+  .bg-color-animation();
+  animation-name: fl-zoom-in-x-keyframes;
+}
+
+// 从顶向下展开动画
+.fl-zoom-in-top {
+  .opacity-animation();
+  transform-origin: 50% 0;
+  animation-name: fl-zoom-in-y-keyframes;
+}
+
+// 从底向上展开动画
+.fl-zoom-in-bottom {
+  .opacity-animation();
+  transform-origin: 50% 100%;
+  animation-name: fl-zoom-in-y-keyframes;
+}
+
+// 从左向右展开动画
+.fl-zoom-in-left {
+  .opacity-animation();
+  transform-origin: 0% 50%;
+  animation-name: fl-zoom-in-x-keyframes;
+}
+
+.fl-zoom-in-right {
+  .opacity-animation();
+  transform-origin: 100% 50%;
+  animation-name: fl-zoom-in-x-keyframes;
+}
+/* zoom 展开动画 END */

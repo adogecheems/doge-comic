@@ -1,0 +1,45 @@
+@btn-variant-ruleset: {
+  #btn-variant(@name, @background, @border, @active-background: darken(@background, 10%), @active-border: darken(@border, 12.5%)) {
+    color: @background;
+    background-color: @background;
+    border-color: @border;
+
+    &-disabled {
+      opacity: @disabled-opacity;
+    }
+
+    &-active:active {
+      //background-color: @active-background;
+      //border-color: @active-border;
+      opacity: @active-opacity;
+    }
+
+    &-plain {
+      border-color: @border;
+      background-color: transparent;
+
+      &-disabled {
+        opacity: @disabled-opacity;
+      }
+    }
+  }
+}
+
+@btn-text-variant-ruleset: {
+  #btn-text-variant(@name, @color, @active-color: darken(@color, 10%)) {
+    color: @btn-color;
+    &-disabled {
+      opacity: @disabled-opacity;
+    }
+    &-active:active {
+      // color: @btn-color;
+      opacity: @active-opacity;
+    }
+    &-plain {
+      color: @color;
+      &-disabled {
+        opacity: @disabled-opacity;
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+/**
+ * 边框,渐变,动画等公共mixin库
+ */
+
+.border(@width: @border-width-normal,@color:@border-color,@radius:@border-radius-normal) {
+  border-width: @width;
+  border-style: solid;
+  border-color: @color;
+  border-radius: @radius;
+}
+
+.transition(@property: all, @duration:@animation-duration-base, @function:linear, @delay:0) {
+  transition-property: @property;
+  transition-duration: @duration;
+  transition-timing-function: @function;
+  transition-delay: @delay;
+}
+
+// 动画属性:
+// animation-name:为 @keyframes 动画指定名称，可查看@keyframes使用方法
+// animation-duration:规定动画完成一个周期所花费的秒或毫秒.默认是 0,支持:1s, 200ms
+// animation-timing-function:规定动画的速度曲线.默认:ease.
+// animation-delay:规定动画何时开始.默认是 0.支持:1s, 200ms.
+// animation-iteration-count: 规定动画被播放的次数,默认是1.支持infinite(无限循环)和数字.
+// animation-direction:规定动画是否在下一周期逆向地播放。支持:normal, reverse, alternate,alternate-reverse.
+// animation-fill-mode:规定当动画不播放时(当动画完成时m或当动画有一个延迟未开始播放时),要应用到元素的样式.支持:forwards backwards, both.
+// 注意:
+// animation样式简写时请写6个属性,如:animation:theanimation 4s linear 1s infinite alternate;
+// animation-fill-mode请独立一个样式.
+// animation-play-state暂不支持.
+.animation(@duration:@animation-duration-base, @function:linear, @delay:0,@fillMode:forwards) {
+  animation-duration: @duration;
+  animation-timing-function: @function;
+  animation-delay: @delay;
+  // animation-iteration-count
+  // animation-direction
+  animation-fill-mode: @fillMode;
+}

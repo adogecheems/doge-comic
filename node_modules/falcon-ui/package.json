@@ -1,0 +1,32 @@
+{
+  "name": "falcon-ui",
+  "version": "2.0.2",
+  "description": "ui components for falcon",
+  "main": "src/index.js",
+  "single-js-bundle": false,
+  "scripts": {
+    "start": "aiot-cli preview",
+    "build": "aiot-cli -p",
+    "build:dev": "aiot-cli",
+    "build:bin": "aiot-cli -q -p",
+    "build:prod": "aiot-cli -c -q -p",
+    "build:bin-nopack": "aiot-cli -q",
+    "build:web": "aiot-cli build-web",
+    "build:simulator": "aiot-cli simulator ./",
+    "pub": "lerna publish"
+  },
+  "keywords": [
+    "iot",
+    "miniapp",
+    "falcon"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bindingx-parser": "^0.0.3"
+  },
+  "devDependencies": {
+  },
+  "files": [
+    "src"
+  ]
+}

@@ -1,0 +1,44 @@
+// only used by internal component individually, so do not import in user project
+/*******************************
+    Internal Component Theme
+*******************************/
+
+@import "./theme.less";
+
+/*-------------------
+ Component Variables
+---------------------*/
+
+/* Default */
+@import (optional) "../packages/@{element}/@{element}.variables.less";
+
+/* Base Theme */
+@import (optional) "./@{theme}/@{type}/@{element}.variables.less";
+
+/* Custom Theme */
+@import (optional) "@{themeCustom}/@{type}/@{element}.variables.less";
+
+
+/*******************************
+             Mix-ins
+*******************************/
+
+/*------------------
+       Fonts
+-------------------*/
+/*
+// TODO:
+// .loadFonts() when (@importAliFonts) {
+//   @import url('@{aliProtocol}fonts.aliyun.com/css?family=@{aliFontRequest}');
+// }
+*/
+/*------------------
+     Overrides
+-------------------*/
+
+.loadUIOverrides() {
+  @import (optional) "../packages/@{element}/@{element}.overrides.less";
+  @import (optional) "@{themeCustom}/@{type}/@{element}.overrides.less";
+}
+
+/* End Config */

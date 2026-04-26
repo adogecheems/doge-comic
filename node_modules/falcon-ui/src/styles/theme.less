@@ -1,0 +1,23 @@
+/* Theme that can be used in user project, for global variables only */
+/*------------------
+       Theme
+-------------------*/
+
+// these variables will be injected in aiot-cli, according to user app.json config
+/* theme that haasui provide */
+// @theme: "theme-dark";
+/* theme that user can custom */
+// @themeCustom: "theme-custom";
+
+/*--------------------
+   theme Variables
+---------------------*/
+
+/* Default theme.variables */
+@import "./globals/theme.variables.less";
+
+/* Base Theme Component's theme.variables */
+@import (optional) "./@{theme}/globals/theme.variables.less";
+
+/* Custom Theme Component's theme.variables */
+@import (optional) "@{themeCustom}/globals/theme.variables.less";
