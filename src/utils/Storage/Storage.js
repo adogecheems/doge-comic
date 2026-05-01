@@ -1,5 +1,12 @@
 import storage from 'storage';
 
+const defaultSetting = {
+    scale: 1,
+    syncTime: 1500,
+    isDebug: false,
+    hidableSidebar: false,
+};
+
 function getNow() {
     const now = new Date();
 
@@ -13,7 +20,7 @@ function getNow() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-export default class Setting {
+export default class Storage {
     async _get(key) {
         try {
             const value = await storage.getStorage(key);
@@ -73,48 +80,21 @@ export default class Setting {
         return history;
     }
 
-    async setScale(scale) {
-        if (scale >= 0.5 && scale <= 2) {
-            await this._set('scale', scale);
+    async set(key, value) {
+        if (key in defaultSetting) {
+            await this._set(key, value);
         }
     }
 
-    async getScale() {
-        if (await this._get('scale')) {
-            return await this._get('scale');
-        } else {
-            await this._set('scale', 1);
-            return 1;
-        }
-    }
-
-    async setSyncTime(syncTime) {
-        if (syncTime >= 300 && syncTime <= 3000) {
-            await this._set('syncTime', syncTime);
-        }
-    }
-
-    async getSyncTime() {
-        if (await this._get('syncTime')) {
-            return await this._get('syncTime');
-        } else {
-            await this._set('syncTime', 1000);
-            return 1000;
-        }
-    }
-
-    async setDebugMode(isDebug) {
-        if (isDebug === true || isDebug === false) {
-            await this._set('isDebug', isDebug);
-        }
-    }
-
-    async isDebugMode() {
-        if (await this._get('isDebug')) {
-            return await this._get('isDebug');
-        } else {
-            await this._set('isDebug', false);
-            return false;
+    async get(key) {
+        if (key in defaultSetting) {
+            const value = await this._get(key);
+            if (value !== null) {
+                return value;
+            } else {
+                await this._set(key, defaultSetting[key]);
+                return defaultSetting[key];
+            }
         }
     }
 }

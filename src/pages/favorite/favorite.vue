@@ -20,9 +20,9 @@ import ButtonColumn from "../../components/button-column.vue";
 import HistoryCard from "../../components/history-card.vue";
 import IconButton from "../../components/icon-button.vue";
 
-import Setting from "../../utils/Setting/Setting.js";
+import Storage from "../../utils/Storage/Storage.js";
 
-const setting = new Setting();
+const setting = new Storage();
 
 export default {
     name: 'Favorite',

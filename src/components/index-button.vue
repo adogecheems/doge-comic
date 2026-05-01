@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name: 'MainButton',
+    name: 'IndexButton',
     props: {
         text: { type: String, required: true },
         icon: { type: String, required: true },

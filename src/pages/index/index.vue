@@ -8,16 +8,20 @@
         <scroller style="flex: 1;" over-scroll="50px" over-fling="50px" show-scrollbar="false">
             <text class="title">Doge漫画</text>
             <div class="options-line">
-                <MainCard class="main-card" :icon="require('../../assets/folder.png?base64')" text="本地文件"
+                <IndexButton class="index-button" :icon="require('../../assets/folder.png?base64')" text="本地文件"
                     @click="openLink('filemanager')" />
-                <MainCard class="main-card" :icon="require('../../assets/love.png?base64')" text="我的收藏"
+                <IndexButton class="index-button" :icon="require('../../assets/love.png?base64')" text="我的收藏"
                     @click="openLink('favorite')" />
-                <MainCard class="main-card" :icon="require('../../assets/history.png?base64')" text="完整历史"
+                <IndexButton class="index-button" :icon="require('../../assets/history.png?base64')" text="完整历史"
                     @click="openLink('history')" />
             </div>
             <div class="content">
-                <HistoryCard class="history-card" v-for="(item, index) in history" :key="index" :node="item.node"
-                    time="" @click="open(item.node)" :style="{ width: 0.499 * vw - 0.06 * vh  }" />
+                <div class="index-card" :style="{width: coverWidth, height: coverHeight}" @click="openLink('store')">
+                    <image style="width: 37vh; height: 37vh;" :src="require('../../assets/books2.png?base64')" />
+                    <text class="index-card-text">漫画库</text>
+                </div>
+                <ComicCard class="comic-card" :style="{width: coverWidth, height: coverHeight}" v-for="(item, index) in showingList" :key="index" :node="item.node"
+                    @click="open(item.node)" />
             </div>
         </scroller>
     </div>
@@ -29,27 +33,44 @@ const w = env.deviceWidth;
 const h = env.deviceHeight;
 
 import ButtonColumn from "../../components/button-column.vue";
-import HistoryCard from "../../components/history-card.vue";
+import ComicCard from "../../components/comic-card.vue";
 import IconButton from "../../components/icon-button.vue";
-import MainCard from "../../components/main-card.vue";
+import IndexButton from "../../components/index-button.vue";
 
-import Setting from "../../utils/Setting/Setting";
+import Storage from "../../utils/Storage/Storage.js";
 
-const setting = new Setting();
+const setting = new Storage();
 
 export default {
     name: 'index',
     components: {
-        MainCard,
+        IndexButton,
         ButtonColumn,
         IconButton,
-        HistoryCard
+        ComicCard
     },
     data() {
         return {
             history: [],
             vw: w - 0.39 * h,
             vh: h,
+        }
+    },
+    async created() {
+        this.history = await setting.getAllItems();
+    },
+    computed: {
+        showingList() {
+            return this.history.slice(1 - this.lineConut).reverse();
+        },
+        lineConut() {
+            return Math.floor(this.vw / (0.87 * this.vh));
+        },
+        coverWidth() {
+            return this.vw / this.lineConut - 0.07 * this.vh - 1;
+        },
+        coverHeight() {
+            return this.coverWidth * 1.25;
         }
     },
     methods: {
@@ -62,11 +83,6 @@ export default {
         open(node) {
             $falcon.navTo('reader', { node: JSON.stringify(node) });
         },
-        onShow() {
-            setting.getAllItems().then(items => {
-                this.history = items;
-            });
-        }
     }
 }
 </script>
@@ -80,18 +96,36 @@ export default {
     justify-content: space-between;
 }
 
-.main-card {
+.index-button {
     flex: 1;
     margin-right: 6vh;
 }
 
 .content {
-    margin-top: 6vh;
+    margin-top: 7vh;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-.history-card {
-    margin: 0 6vh 6vh 0;
+.comic-card {
+    margin: 0 7vh 7vh 0;
+}
+
+.index-card {
+    margin: 0 7vh 7vh 0;
+    background-color: #ffffff;
+    border-radius: 6vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.index-card:active {
+    opacity: 0.6;
+}
+
+.index-card-text {
+    margin-top: 8vh;
+    font-size: 10vh;
+    color: @link;
 }
 </style>

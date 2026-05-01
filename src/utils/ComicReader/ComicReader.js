@@ -10,6 +10,7 @@ export default class ComicReader {
         this.index = options.index || 0;
         this.offset = options.offset || 0;
         this.scale = options.scale || 1;
+        this.manualScaled = false;
 
         this.urls = [];
         this.urlsSegments = [];
@@ -66,6 +67,13 @@ export default class ComicReader {
     getOffset() { return this.offset * this.scale; }
     setOffset(y) { this.offset = Math.floor(y / this.scale); }
 
-    getProgress() { return { index: this.index, offset: this.offset, scale: this.scale }; }
-    setProgress(p) { if (!p) return; this.index = p.index || 0; this.offset = p.offset || 0; if (p.scale !== 1) this.scale = p.scale; }
+    getProgress() { return { index: this.index, offset: this.offset, scale: this.scale, manualScaled: this.manualScaled }; }
+    setProgress(p) {
+        if (!p) return;
+
+        this.index = p.index || 0;
+        this.offset = p.offset || 0;
+        this.manualScaled = p.manualScaled || false;
+        if (this.manualScaled) this.scale = p.scale;
+    }
 }

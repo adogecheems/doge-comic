@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container">
-            <ButtonColumn>
+            <ButtonColumn v-show="showSidebar || !hidableSidebar">
                 <IconButton :icon="require('../../assets/back.png?base64')" @click="back" />
                 <IconButton :icon="require('../../assets/love.png?base64')" @click="love" />
                 <IconButton :icon="require('../../assets/menu.png?base64')" @click="openMenu" />
@@ -13,7 +13,7 @@
                             <PageTurningButton :icon="require('../../assets/back.png?base64')" v-if="reader.index !== 0"
                                 text="上一页" @click="reader.prev(); go('end')" style="margin: 6vh 4vh 7vh 0;" />
                             <scroller show-scrollbar="false" scroll-direction="horizontal" over-scroll="50px"
-                                over-fling="50px">
+                                over-fling="50px" @scroll="setOffsetX">
                                 <div>
                                     <richtext :key="reader.index">
                                         <template v-for="url in reader.segment">
@@ -49,7 +49,8 @@
                 index: {{ reader.index }},
                 offset: {{ reader.offset }},
                 scale: {{ reader.scale }},
-                loadingImage: {{ loadingImage }},
+                imageCount: {{ reader.urls.length }},
+                segmentSize: {{ 8 }},
                 debugValue: {{ debugValue }}
             </text>
         </div>
@@ -68,9 +69,9 @@ import SeekbarCard from "../../components/seekbar-card.vue";
 import PageTurningButton from "../../components/page-turning-button.vue";
 import Toast from "../../components/toast.vue";
 import ComicReader from "../../utils/ComicReader/ComicReader.js";
-import Setting from "../../utils/Setting/Setting.js";
+import Storage from "../../utils/Storage/Storage.js";
 
-const setting = new Setting();
+const setting = new Storage();
 
 export default {
     components: {
@@ -85,18 +86,22 @@ export default {
         return {
             loading: true,
             reader: null,
-            vw: w - 0.39 * h,
+            vw: w,
             vh: h,
+            hidableSidebar: false,
+            showSidebar: false,
             loadingImage: true,
             debugValue: 'none',
             isDebug: false,
         }
     },
     async created() {
-        this.isDebug = await setting.isDebugMode();
+        this.isDebug = await setting.get('isDebug');
+        this.hidableSidebar = await setting.get('hidableSidebar');
+        this.w = this.hidableSidebar ? w : w - 0.39 * h;
 
         let node = JSON.parse(this.$page.options.node);
-        this.reader = new ComicReader(node, { scale: await setting.getScale() });
+        this.reader = new ComicReader(node, { scale: await setting.get('scale') });
 
         if (this.$page.options.progress) {
             this.reader.setProgress(JSON.parse(this.$page.options.progress));
@@ -134,17 +139,31 @@ export default {
         onProgressChange(e) {
             this.reader.go(e.detail.value - 1);
         },
-        onScaleChange(e) {
-            this.reader.scale = e.detail.value / 10;
+        async onScaleChange(e) {
+            let scale = e.detail.value / 10;
+            this.reader.manualScaled = scale !== await setting.get('scale');
+            this.reader.scale = scale;
+
             this.go('start', this.reader.getOffset());
         },
         setOffset(event) {
             if (this.loadingImage) return;
             this.reader.setOffset(event.contentOffset.y);
         },
+        setOffsetX(event) {
+            if (this.loadingImage) return;
+            if (!this.hidableSidebar) return;
+            let offsetX = event.contentOffset.x;
+
+            if (offsetX < -35) {
+                this.showSidebar = true;
+            } else if (offsetX > 0) {
+                this.showSidebar = false;
+            }
+        },
         async go(ref, offset = 0) {
             this.loadingImage = true;
-            await new Promise(async resolve => { setTimeout(resolve, offset ? await setting.getSyncTime() : 0) });
+            await new Promise(async resolve => { setTimeout(resolve, await setting.get('syncTime')) });
             this.loadingImage = false;
             await new Promise(resolve => this.$page.$dom.scrollToElement(this.$refs[ref], { offset }));
         },

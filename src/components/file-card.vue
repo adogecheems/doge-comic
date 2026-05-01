@@ -23,8 +23,8 @@ export default {
 @import "../styles/md-color.less";
 
 .card {
-    height: 30vh;
     background-color: @neutral;
+    min-height: 30vh;
     border-radius: 6vh;
     padding: 3vh 7vh;
     align-items: center;
@@ -37,6 +37,7 @@ export default {
 }
 
 .wrapper {
+    flex: 1;
     flex-direction: row;
     align-items: center;
 }
@@ -53,6 +54,8 @@ export default {
 }
 
 .size {
+    margin-left: 8vh;
+    text-align: right;
     font-size: 8vh;
     color: @outline;
 }

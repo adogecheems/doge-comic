@@ -7,6 +7,7 @@
     "reader": "pages/reader/reader.vue",
     "history": "pages/history/history.vue",
     "favorite": "pages/favorite/favorite.vue",
-    "setting": "pages/setting/setting.vue"
+    "setting": "pages/setting/setting.vue",
+    "store": "pages/store/store.vue"
   }
 }

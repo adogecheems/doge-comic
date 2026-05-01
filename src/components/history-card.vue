@@ -1,7 +1,7 @@
 <template>
     <div class="card" @click="$emit('click')">
-        <image :key="node.name" class="preview" resize="cover" :src="preview" />
-        <div>
+        <image class="preview" resize="cover" :src="preview" />
+        <div style="flex: 1;">
             <text class="name">{{ node.path.split('/').pop() }}</text>
             <text class="time">{{ time }}</text>
         </div>
