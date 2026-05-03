@@ -20,7 +20,7 @@
                     <image style="width: 37vh; height: 37vh;" :src="require('../../assets/books2.png?base64')" />
                     <text class="index-card-text">漫画库</text>
                 </div>
-                <ComicCard class="comic-card" :style="{width: coverWidth, height: coverHeight}" v-for="(item, index) in showingList" :key="index" :node="item.node"
+                <ComicCard class="comic-card" :style="{width: coverWidth, height: coverHeight}" v-for="(item, index) in showingList" :key="version" :node="item.node"
                     @click="open(item.node)" />
             </div>
         </scroller>
@@ -54,10 +54,8 @@ export default {
             history: [],
             vw: w - 0.39 * h,
             vh: h,
+            version: 0,
         }
-    },
-    async created() {
-        this.history = await setting.getAllItems();
     },
     computed: {
         showingList() {
@@ -79,6 +77,12 @@ export default {
         },
         back() {
             this.$page.finish();
+        },
+        onShow() {
+            setting.getAllItems('history').then(history => {
+                this.history = history;
+                this.version++;
+            });
         },
         open(node) {
             $falcon.navTo('reader', { node: JSON.stringify(node) });
@@ -124,7 +128,7 @@ export default {
 }
 
 .index-card-text {
-    margin-top: 8vh;
+    margin-top: 7vh;
     font-size: 10vh;
     color: @link;
 }

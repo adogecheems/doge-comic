@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container">
-            <ButtonColumn v-show="showSidebar || !hidableSidebar">
+            <ButtonColumn v-show="showSidebar">
                 <IconButton :icon="require('../../assets/back.png?base64')" @click="back" />
                 <IconButton :icon="require('../../assets/love.png?base64')" @click="love" />
                 <IconButton :icon="require('../../assets/menu.png?base64')" @click="openMenu" />
@@ -11,7 +11,8 @@
                     <div ref="start" :style="{ height: loadingImage ? 16000 : null }">
                         <div v-show="!loading && !loadingImage">
                             <PageTurningButton :icon="require('../../assets/back.png?base64')" v-if="reader.index !== 0"
-                                text="上一页" @click="reader.prev(); go('end')" style="margin: 6vh 4vh 7vh 0;" />
+                                text="上一页" @click="reader.prev(); go('start', 16000)" style="margin: 6vh 4vh 7vh 0;"
+                                :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
                             <scroller show-scrollbar="false" scroll-direction="horizontal" over-scroll="50px"
                                 over-fling="50px" @scroll="setOffsetX">
                                 <div>
@@ -24,7 +25,7 @@
                             </scroller>
                             <PageTurningButton ref="end" :icon="require('../../assets/next.png?base64')"
                                 v-if="reader.index < reader.urlsSegments.length - 1" text="下一页" @click="reader.next()"
-                                style="margin: 7vh 4vh 6vh 0;" />
+                                style="margin: 7vh 4vh 6vh 0;" :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
                         </div>
                     </div>
                 </scroller>
@@ -86,10 +87,9 @@ export default {
         return {
             loading: true,
             reader: null,
-            vw: w,
-            vh: h,
-            hidableSidebar: false,
-            showSidebar: false,
+            vw: null,
+            hidableSidebar: null,
+            showSidebar: null,
             loadingImage: true,
             debugValue: 'none',
             isDebug: false,
@@ -97,8 +97,10 @@ export default {
     },
     async created() {
         this.isDebug = await setting.get('isDebug');
+
         this.hidableSidebar = await setting.get('hidableSidebar');
-        this.w = this.hidableSidebar ? w : w - 0.39 * h;
+        this.showSidebar = this.hidableSidebar ? false : true;
+        this.vw = this.hidableSidebar ? w : w - 0.39 * h;
 
         let node = JSON.parse(this.$page.options.node);
         this.reader = new ComicReader(node, { scale: await setting.get('scale') });
@@ -122,8 +124,22 @@ export default {
         }
     },
     methods: {
+        onShow() {
+            this._backpressed = () => {
+                this.back();
+            }
+
+            this.$page.$npage.setSupportBack(false);
+            this.$page.$npage.on("backpressed", this._backpressed);
+        },
+        onHide() {
+            this.$page.$npage.setSupportBack(true);
+            this.$page.$npage.off("backpressed", this._backpressed);
+        },
         back() {
-            this.$page.finish();
+            setting.addItem(this.reader.node, this.reader.getProgress()).then(() => {
+                this.$page.finish();
+            });
         },
         love() {
             setting.addItem(this.reader.node, this.reader.getProgress(), 'favorite').then(() => {
@@ -132,9 +148,6 @@ export default {
         },
         openMenu() {
             $falcon.trigger('drawer', { show: true });
-        },
-        onHide() {
-            setting.addItem(this.reader.node, this.reader.getProgress())
         },
         onProgressChange(e) {
             this.reader.go(e.detail.value - 1);
@@ -157,7 +170,7 @@ export default {
 
             if (offsetX < -35) {
                 this.showSidebar = true;
-            } else if (offsetX > 0) {
+            } else if (offsetX > 35) {
                 this.showSidebar = false;
             }
         },
