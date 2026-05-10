@@ -3,7 +3,7 @@
         <ButtonColumn>
             <IconButton :icon="require('../../assets/back.png?base64')" @click="back" />
         </ButtonColumn>
-        <scroller style="flex: 1;" over-scroll="50px" over-fling="50px" show-scrollbar="false">
+        <scroller style="flex: 1;" over-scroll="50px" over-fling="50px">
             <text class="title">漫画库</text>
             <text v-if="loading" class="loading">少女祈祷中...</text>
             <text v-else-if="store.length === 0" class="loading">什么也没有喵...</text>
@@ -53,7 +53,7 @@ export default {
             return this.vw / count - 0.07 * this.vh - 1;
         },
         height() {
-            return this.width * 1.25;
+            return this.width * 1.41;
         }
     },
     methods: {

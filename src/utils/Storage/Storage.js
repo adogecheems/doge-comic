@@ -2,7 +2,6 @@ import storage from 'storage';
 
 const defaultSetting = {
     scale: 1,
-    syncTime: 1500,
     isDebug: false,
     hidableSidebar: false,
 };

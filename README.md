@@ -82,13 +82,13 @@ npm run build:prod
 先安装必要的依赖：
 
 ```bash
-pip install Pillow pypdfium2 colorama
+pip install Pillow pypdfium2 tqdm
 ```
 
 然后即可使用如下命令将漫画文件夹转换成阅读器可用的图片文件夹形式：
 
 ```bash
-python convert.py <漫画文件夹路径|PDF文件路径> <输出文件夹路径>
+python convert.py <漫画文件夹路径|zip文件路径|PDF文件路径> [<输出文件夹路径> (默认文件名|文件夹名)] [-j <并行线程数>] [--no-confirm (跳过确认提示)]
 ```
 
 ## 关于

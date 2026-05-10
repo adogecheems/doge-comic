@@ -10,9 +10,7 @@
             <SettingCard item="可隐藏的侧边栏" desc="" class="card">
                 <Toggle v-if="!loading" :defaultValue="hidableSidebar" @click="switchHidableSidebar" />
             </SettingCard>
-            <SeekbarCard min="300" max="3000" step="100" :value="syncTime" scale="0.001" @change="onSyncTimeChange"
-                text="（高级）渲染同步时间" class="card" />
-            <SettingCard item="（高级）启用调试模式" desc="" class="card">
+            <SettingCard item="启用调试模式" desc="" class="card">
                 <Toggle v-if="!loading" :defaultValue="isDebug" @click="switchDebugMode" />
             </SettingCard>
         </scroller>
@@ -50,7 +48,6 @@ export default {
     },
     async created() {
         this.scale = await setting.get('scale');
-        this.syncTime = await setting.get('syncTime');
         this.isDebug = await setting.get('isDebug');
         this.hidableSidebar = await setting.get('hidableSidebar');
         this.loading = false;
@@ -61,9 +58,6 @@ export default {
         },
         onScaleChange(e) {
             setting.set('scale', e.detail.value / 10);
-        },
-        onSyncTimeChange(e) {
-            setting.set('syncTime', e.detail.value);
         },
         switchDebugMode(checked) {
             setting.set('isDebug', checked);

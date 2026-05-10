@@ -8,10 +8,10 @@
             </ButtonColumn>
             <div style="flex: 1;">
                 <scroller over-scroll="50px" over-fling="50px" @scroll="setOffset">
-                    <div ref="start" :style="{ height: loadingImage ? 16000 : null }">
-                        <div v-show="!loading && !loadingImage">
+                    <div ref="start" :style="{ height: 12 * width }">
+                        <div v-show="!loading">
                             <PageTurningButton :icon="require('../../assets/back.png?base64')" v-if="reader.index !== 0"
-                                text="上一页" @click="reader.prev(); go('start', 16000)" style="margin: 6vh 4vh 7vh 0;"
+                                text="上一页" @click="reader.prev(); go('start')" style="margin: 6vh 4vh 7vh 0;"
                                 :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
                             <scroller show-scrollbar="false" scroll-direction="horizontal" over-scroll="50px"
                                 over-fling="50px" @scroll="setOffsetX">
@@ -23,14 +23,15 @@
                                     </richtext>
                                 </div>
                             </scroller>
-                            <PageTurningButton ref="end" :icon="require('../../assets/next.png?base64')"
-                                v-if="reader.index < reader.urlsSegments.length - 1" text="下一页" @click="reader.next()"
-                                style="margin: 7vh 4vh 6vh 0;" :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
+                            <PageTurningButton :icon="require('../../assets/next.png?base64')"
+                                v-if="reader.index < reader.urlsSegments.length - 1" text="下一页"
+                                @click="reader.next(); go('start')" style="margin: 7vh 4vh 6vh 0;"
+                                :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
                         </div>
                     </div>
                 </scroller>
             </div>
-            <div class="loading-area" v-show="loading || loadingImage">
+            <div class="loading-area" v-show="loading">
                 <text class="loading">少女祈祷中...</text>
             </div>
         </div>
@@ -90,7 +91,7 @@ export default {
             vw: null,
             hidableSidebar: null,
             showSidebar: null,
-            loadingImage: true,
+            isListeningScroll: false,
             debugValue: 'none',
             isDebug: false,
         }
@@ -125,21 +126,22 @@ export default {
     },
     methods: {
         onShow() {
-            this._backpressed = () => {
-                this.back();
-            }
+            this._backpressed = () => { this.back() }
 
             this.$page.$npage.setSupportBack(false);
             this.$page.$npage.on("backpressed", this._backpressed);
         },
         onHide() {
+            this.save();
+
             this.$page.$npage.setSupportBack(true);
             this.$page.$npage.off("backpressed", this._backpressed);
         },
         back() {
-            setting.addItem(this.reader.node, this.reader.getProgress()).then(() => {
-                this.$page.finish();
-            });
+            this.save().then(() => { this.$page.finish() });
+        },
+        async save() {
+            await setting.addItem(this.reader.node, this.reader.getProgress());
         },
         love() {
             setting.addItem(this.reader.node, this.reader.getProgress(), 'favorite').then(() => {
@@ -160,11 +162,10 @@ export default {
             this.go('start', this.reader.getOffset());
         },
         setOffset(event) {
-            if (this.loadingImage) return;
+            if (!this.isListeningScroll) return;
             this.reader.setOffset(event.contentOffset.y);
         },
         setOffsetX(event) {
-            if (this.loadingImage) return;
             if (!this.hidableSidebar) return;
             let offsetX = event.contentOffset.x;
 
@@ -175,9 +176,7 @@ export default {
             }
         },
         async go(ref, offset = 0) {
-            this.loadingImage = true;
-            await new Promise(async resolve => { setTimeout(resolve, await setting.get('syncTime')) });
-            this.loadingImage = false;
+            setTimeout(() => { this.isListeningScroll = true }, 5000);
             await new Promise(resolve => this.$page.$dom.scrollToElement(this.$refs[ref], { offset }));
         },
     }

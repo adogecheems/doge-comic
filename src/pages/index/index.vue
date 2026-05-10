@@ -68,7 +68,7 @@ export default {
             return this.vw / this.lineConut - 0.07 * this.vh - 1;
         },
         coverHeight() {
-            return this.coverWidth * 1.25;
+            return this.coverWidth * 1.41;
         }
     },
     methods: {
