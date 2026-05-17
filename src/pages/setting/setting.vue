@@ -7,10 +7,10 @@
             <text class="title">设置</text>
             <SeekbarCard min="5" max="20" step="1" :value="scale * 10" scale="0.1" @change="onScaleChange" text="默认图片缩放"
                 class="card" />
-            <SettingCard item="可隐藏的侧边栏" desc="" class="card">
+            <SettingCard item="可隐藏的侧边栏" desc="右划可以再次呼出侧边栏" class="card">
                 <Toggle v-if="!loading" :defaultValue="hidableSidebar" @click="switchHidableSidebar" />
             </SettingCard>
-            <SettingCard item="启用调试模式" desc="" class="card">
+            <SettingCard item="启用调试模式" desc="在阅读器界面显示调试信息" class="card">
                 <Toggle v-if="!loading" :defaultValue="isDebug" @click="switchDebugMode" />
             </SettingCard>
         </scroller>
@@ -74,6 +74,6 @@ export default {
 @import "../../styles/common.less";
 
 .card {
-    margin: 0 6vh 6vh 0;
+    margin: 0 6vh 5vh 0;
 }
 </style>

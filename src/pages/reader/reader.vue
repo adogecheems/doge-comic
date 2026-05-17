@@ -6,26 +6,29 @@
                 <IconButton :icon="require('../../assets/love.png?base64')" @click="love" />
                 <IconButton :icon="require('../../assets/menu.png?base64')" @click="openMenu" />
             </ButtonColumn>
-            <div style="flex: 1;">
+            <div style="flex: 1;" v-if="!loading">
                 <scroller over-scroll="50px" over-fling="50px" @scroll="setOffset">
-                    <div ref="start" :style="{ height: 12 * width }">
-                        <div v-show="!loading">
-                            <PageTurningButton :icon="require('../../assets/back.png?base64')" v-if="reader.index !== 0"
-                                text="上一页" @click="reader.prev(); go('start')" style="margin: 6vh 4vh 7vh 0;"
-                                :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
-                            <scroller show-scrollbar="false" scroll-direction="horizontal" over-scroll="50px"
-                                over-fling="50px" @scroll="setOffsetX">
-                                <div>
-                                    <richtext :key="reader.index">
-                                        <template v-for="url in reader.segment">
-                                            <image :style="{ width: width }" :src="url" /><br>
-                                        </template>
-                                    </richtext>
-                                </div>
-                            </scroller>
+                    <div ref="start" :style="{ height: isImageLoaded ? '' : 12 * width }">
+                        <div v-show="!loading" style="justify-content: space-between;">
+                            <div>
+                                <PageTurningButton :icon="require('../../assets/back.png?base64')"
+                                    v-if="reader.index !== 0" text="上一页" @click="reader.prev();"
+                                    style="margin: 6vh 4vh 7vh 0;"
+                                    :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
+                                <scroller show-scrollbar="false" scroll-direction="horizontal" over-scroll="50px"
+                                    over-fling="50px" @scroll="setOffsetX">
+                                    <div>
+                                        <richtext :key="reader.index">
+                                            <template v-for="url in reader.segment">
+                                                <image :style="{ width: width }" :src="url" /><br>
+                                            </template>
+                                        </richtext>
+                                    </div>
+                                </scroller>
+                            </div>
                             <PageTurningButton :icon="require('../../assets/next.png?base64')"
                                 v-if="reader.index < reader.urlsSegments.length - 1" text="下一页"
-                                @click="reader.next(); go('start')" style="margin: 7vh 4vh 6vh 0;"
+                                @click="reader.next(); go()" style="margin: 7vh 4vh 6vh 0;"
                                 :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
                         </div>
                     </div>
@@ -53,6 +56,8 @@
                 scale: {{ reader.scale }},
                 imageCount: {{ reader.urls.length }},
                 segmentSize: {{ 8 }},
+                isListeningScroll: {{ isListeningScroll }},
+                isImageLoaded: {{ isImageLoaded }}
                 debugValue: {{ debugValue }}
             </text>
         </div>
@@ -92,6 +97,7 @@ export default {
             hidableSidebar: null,
             showSidebar: null,
             isListeningScroll: false,
+            isImageLoaded: false,
             debugValue: 'none',
             isDebug: false,
         }
@@ -117,7 +123,7 @@ export default {
         await this.reader.load();
         this.loading = false;
 
-        this.go('start', this.reader.getOffset());
+        this.go(this.reader.getOffset());
     },
     computed: {
         width() {
@@ -159,7 +165,7 @@ export default {
             this.reader.manualScaled = scale !== await setting.get('scale');
             this.reader.scale = scale;
 
-            this.go('start', this.reader.getOffset());
+            this.go(this.reader.getOffset());
         },
         setOffset(event) {
             if (!this.isListeningScroll) return;
@@ -175,9 +181,12 @@ export default {
                 this.showSidebar = false;
             }
         },
-        async go(ref, offset = 0) {
-            setTimeout(() => { this.isListeningScroll = true }, 5000);
-            await new Promise(resolve => this.$page.$dom.scrollToElement(this.$refs[ref], { offset }));
+        go(offset = 0) {
+            this.isListeningScroll = false;
+            this.isImageLoaded = false;
+            setTimeout(() => { this.isListeningScroll = true }, 25);
+            setTimeout(() => { this.isImageLoaded = true }, 10000);
+            this.$page.$dom.scrollToElement(this.$refs.start, { offset });
         },
     }
 }
