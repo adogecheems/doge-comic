@@ -16,12 +16,12 @@
                     @click="openLink('history')" />
             </div>
             <div class="content">
-                <div class="index-card" :style="{width: coverWidth, height: coverHeight}" @click="openLink('store')">
+                <div class="index-card" :style="{ width: coverWidth, height: coverHeight }" @click="openLink('store')">
                     <image style="width: 37vh; height: 37vh;" :src="require('../../assets/books2.png?base64')" />
                     <text class="index-card-text">漫画库</text>
                 </div>
-                <ComicCard class="comic-card" :style="{width: coverWidth, height: coverHeight}" v-for="(item, index) in showingList" :key="version" :node="item.node"
-                    @click="open(item.node)" />
+                <ComicCard class="comic-card" :style="{ width: coverWidth, height: coverHeight }"
+                    v-for="(item, index) in showingList" :key="version" :node="item.node" @click="open(item.node)" />
             </div>
         </scroller>
     </div>
@@ -54,7 +54,7 @@ export default {
             history: [],
             vw: w - 0.39 * h,
             vh: h,
-            version: 0,
+            version: 0
         }
     },
     computed: {

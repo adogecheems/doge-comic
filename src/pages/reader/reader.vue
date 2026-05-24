@@ -9,10 +9,10 @@
             <div style="flex: 1;" v-if="!loading">
                 <scroller over-scroll="50px" over-fling="50px" @scroll="setOffset">
                     <div ref="start" :style="{ height: isImageLoaded ? '' : 12 * width }">
-                        <div v-show="!loading" style="justify-content: space-between;">
+                        <div style="justify-content: space-between;">
                             <div>
                                 <PageTurningButton :icon="require('../../assets/back.png?base64')"
-                                    v-if="reader.index !== 0" text="上一页" @click="reader.prev();"
+                                    v-if="reader.index !== 0" text="上一页" @click="reader.prev(); this.go();"
                                     style="margin: 6vh 4vh 7vh 0;"
                                     :style="{ 'margin-left': showSidebar ? '0' : '4vh' }" />
                                 <scroller show-scrollbar="false" scroll-direction="horizontal" over-scroll="50px"
@@ -56,7 +56,6 @@
                 scale: {{ reader.scale }},
                 imageCount: {{ reader.urls.length }},
                 segmentSize: {{ 8 }},
-                isListeningScroll: {{ isListeningScroll }},
                 isImageLoaded: {{ isImageLoaded }}
                 debugValue: {{ debugValue }}
             </text>
@@ -96,10 +95,10 @@ export default {
             vw: null,
             hidableSidebar: null,
             showSidebar: null,
-            isListeningScroll: false,
             isImageLoaded: false,
             debugValue: 'none',
             isDebug: false,
+            timeoutId: null
         }
     },
     async created() {
@@ -123,6 +122,7 @@ export default {
         await this.reader.load();
         this.loading = false;
 
+        await new Promise(resolve => setTimeout(resolve, 25));
         this.go(this.reader.getOffset());
     },
     computed: {
@@ -168,7 +168,6 @@ export default {
             this.go(this.reader.getOffset());
         },
         setOffset(event) {
-            if (!this.isListeningScroll) return;
             this.reader.setOffset(event.contentOffset.y);
         },
         setOffsetX(event) {
@@ -182,10 +181,10 @@ export default {
             }
         },
         go(offset = 0) {
-            this.isListeningScroll = false;
             this.isImageLoaded = false;
-            setTimeout(() => { this.isListeningScroll = true }, 25);
-            setTimeout(() => { this.isImageLoaded = true }, 10000);
+            clearTimeout(this.timeoutId);
+            this.timeoutId = setTimeout(() => { this.isImageLoaded = true }, 10000);
+
             this.$page.$dom.scrollToElement(this.$refs.start, { offset });
         },
     }
