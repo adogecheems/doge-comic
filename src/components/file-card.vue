@@ -4,7 +4,7 @@
             <image class="icon" v-show="node.isDir && !node.isComic" :src="require('../assets/folder.png?base64')" />
             <image class="icon" v-show="node.isDir && node.isComic" :src="require('../assets/images.png?base64')" />
             <image class="icon" v-show="!node.isDir" :src="require('../assets/image.png?base64')" />
-            <text class="name">{{ node.name }}</text>
+            <div style="flex: 1;"><text class="name">{{ node.name }}</text></div>
         </div>
         <text class="size">{{ node.size }}</text>
     </div>

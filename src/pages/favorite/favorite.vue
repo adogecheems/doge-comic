@@ -6,10 +6,10 @@
         </ButtonColumn>
         <scroller style="flex: 1;" over-scroll="50px" over-fling="50px" class="scroller">
             <text class="title">我的收藏</text>
-            <text v-show="history.length === 0" class="loading">什么也没有喵...</text>
+            <text v-show="favorite.length === 0" class="loading">什么也没有喵...</text>
             <div class="list">
-                <HistoryCard class="card" v-for="(item, index) in history" :key="index"
-                    :node="item.node" :time="item.time" @click="open(item.node, item.progress)" />
+                <HistoryCard class="card" v-for="(item, index) in favorite" :key="index"
+                    :node="item.node" :time="item.time" @click="open(item.node)" />
             </div>
         </scroller>
     </div>
@@ -25,7 +25,7 @@ import Storage from "../../utils/Storage/Storage.js";
 const setting = new Storage();
 
 export default {
-    name: 'Favorite',
+    name: 'favorite',
     components: {
         ButtonColumn,
         IconButton,
@@ -33,7 +33,7 @@ export default {
     },
     data() {
         return {
-            history: [],
+            favorite: [],
         }
     },
     methods: {
@@ -42,15 +42,15 @@ export default {
         },
         clear() {
             setting.clearItems('favorite').then(() => {
-                this.history = [];
+                this.favorite = [];
             });
         },
-        open(node, index) {
-            $falcon.navTo('reader', { node: JSON.stringify(node), index });
+        open(node) {
+            $falcon.navTo('reader', { node: JSON.stringify(node) });
         },
         onShow() {
             setting.getAllItems('favorite').then(items => {
-                this.history = items;
+                this.favorite = items;
             });
         }
     }
@@ -67,6 +67,6 @@ export default {
 }
 
 .card {
-    margin-bottom: 4vh;
+    margin-bottom: 5vh;
 }
 </style>

@@ -49,7 +49,7 @@ export default {
     },
     computed: {
         width() {
-            let count = Math.floor(this.vw / (0.87 * this.vh));
+            let count = Math.floor(this.vw / (0.8 * this.vh));
             return this.vw / count - 0.07 * this.vh - 1;
         },
         height() {

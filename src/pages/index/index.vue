@@ -62,7 +62,7 @@ export default {
             return this.history.slice(1 - this.lineConut).reverse();
         },
         lineConut() {
-            return Math.floor(this.vw / (0.87 * this.vh));
+            return Math.floor(this.vw / (0.8 * this.vh));
         },
         coverWidth() {
             return this.vw / this.lineConut - 0.07 * this.vh - 1;

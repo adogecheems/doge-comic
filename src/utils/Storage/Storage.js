@@ -44,9 +44,7 @@ export default class Storage {
             history = [];
         }
 
-        if (target === 'history') {
-            history = history.filter(item => item.node.path !== node.path);
-        }
+        history = history.filter(item => item.node.path !== node.path);
         history.push({ node, progress, time: getNow() });
 
         await this._set(target, history);

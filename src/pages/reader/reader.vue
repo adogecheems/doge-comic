@@ -49,7 +49,7 @@
             </scroller>
         </Drawer>
         <div v-if="isDebug"
-            style="position: absolute; top: 0; right: 0; padding: 8vh; background-color: #000000; opacity: 0.7;">
+            style="position: absolute; top: 0; right: 0; padding-right: 8vh; background-color: #000000; opacity: 0.7;">
             <text style="font-size: 6vh; color: white;">
                 index: {{ reader.index }},
                 offset: {{ reader.offset }},
@@ -111,12 +111,8 @@ export default {
         let node = JSON.parse(this.$page.options.node);
         this.reader = new ComicReader(node, { scale: await setting.get('scale') });
 
-        if (this.$page.options.progress) {
-            this.reader.setProgress(JSON.parse(this.$page.options.progress));
-        } else {
-            if (await setting.getItem(node)) {
-                this.reader.setProgress(await setting.getItem(node));
-            }
+        if (await setting.getItem(node)) {
+            this.reader.setProgress(await setting.getItem(node));
         }
 
         await this.reader.load();
@@ -151,7 +147,7 @@ export default {
         },
         love() {
             setting.addItem(this.reader.node, this.reader.getProgress(), 'favorite').then(() => {
-                $falcon.trigger('toast', { text: '书签已保存' });
+                $falcon.trigger('toast', { text: '已加入收藏' });
             });
         },
         openMenu() {
